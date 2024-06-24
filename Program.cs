@@ -24,7 +24,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAll",
         builder =>
         {
-            builder.AllowAnyOrigin()
+            builder.AllowAnyOrigin("https://app-4aa979b6-96d0-4b12-a1ae-b17bc8ae29fc.cleverapps.io")
                    .AllowAnyMethod()
                    .AllowAnyHeader();
         });
