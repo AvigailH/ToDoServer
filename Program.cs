@@ -4,14 +4,13 @@ using Microsoft.OpenApi.Models;
 using TodoApi;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// הגדרת שרשרת החיבור למסד הנתונים
+ 
 var connectionString = builder.Configuration.GetConnectionString("ToDoDB");
 
 builder.Services.AddDbContextPool<ToDoDbContext>(options =>
 {
     options.UseMySql(
-        connectionString,
+        connectionString, 
         ServerVersion.AutoDetect(connectionString),
         options => options.EnableRetryOnFailure(
             maxRetryCount: 5,
@@ -20,15 +19,15 @@ builder.Services.AddDbContextPool<ToDoDbContext>(options =>
     );
 });
 
-// הגדרת CORS שמאפשר לכל המקורות
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(policy =>
-    {
-        policy.AllowAnyOrigin()
-              .AllowAnyMethod()
-              .AllowAnyHeader();
-    });
+    options.AddPolicy("AllowAll",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
 });
 
 builder.Services.AddEndpointsApiExplorer();
@@ -54,9 +53,9 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.UseRouting();
-app.UseCors(); // הוספת CORS לפני Authorization
 app.UseAuthorization();
+app.UseRouting();
+app.UseCors("AllowAll"); // כאן השתמשנו בהגדרת CORS שקוראים לה "AllowAll"
 
 app.MapControllers();
 
