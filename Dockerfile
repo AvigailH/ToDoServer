@@ -8,7 +8,8 @@ EXPOSE 8081
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["TodoApiServer/TodoApi.csproj", "."]
+# COPY ["TodoApiServer/TodoApi.csproj", "."]
+COPY ["TodoApi.csproj", "."]
 RUN dotnet restore "./TodoApi.csproj"
 COPY . .
 WORKDIR "/src/."
